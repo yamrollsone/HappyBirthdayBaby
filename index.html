@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>มีอะไรจะให้ 👀</title>
+
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #ffd6e0, #fff5e1, #e6d6ff);
+  padding: 30px;
+  overflow-x: hidden;
+}
+
+#app {
+  max-width: 400px;
+  margin: auto;
+}
+
+h1 {
+  color: #ff4d88;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 20px;
+  border: none;
+  font-size: 16px;
+}
+
+#yes {
+  background: #ff6fa5;
+  color: white;
+}
+
+#no {
+  background: #ccc;
+}
+
+#meme {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 20px;
+  display: none;
+  margin: 20px auto;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+/* 💖 hearts */
+.heart {
+  position: fixed;
+  bottom: 0;
+  font-size: 18px;
+  animation: floatUp 4s linear infinite;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+/* 🎂 เค้กลอย */
+@keyframes floatCake {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+  <h1 id="text">แก... เรามีอะไรจะให้ 👀</h1>
+
+  <img id="meme" src="" />
+
+  <div id="buttons">
+    <button id="yes">อยากรู้ 🤔</button>
+    <button id="no">ไม่อยากรู้ 🙄</button>
+  </div>
+</div>
+
+<audio id="bgm" loop></audio>
+
+<script>
+let text = document.getElementById("text");
+let yesBtn = document.getElementById("yes");
+let noBtn = document.getElementById("no");
+let meme = document.getElementById("meme");
+let audio = document.getElementById("bgm");
+
+let step = 0;
+
+/* 🎵 เพลง */
+audio.src = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+
+document.body.addEventListener("click", () => {
+  audio.play();
+}, { once: true });
+
+/* 💖 hearts */
+function createHeart() {
+  let h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "💖";
+  h.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 4000);
+}
+setInterval(createHeart, 700);
+
+/* ❌ ปุ่มไม่อยากรู้ */
+let noScale = 1;
+noBtn.onclick = () => {
+  noScale *= 0.7;
+  noBtn.style.transform = `scale(${noScale})`;
+};
+
+/* 🐱 แมว (ลิงก์ใหม่ เสถียร) */
+let catMemes = [
+  "https://placekitten.com/300/300",
+  "https://placekitten.com/301/300",
+  "https://placekitten.com/302/300",
+  "https://placekitten.com/303/300"
+];
+
+yesBtn.onclick = () => {
+  step++;
+
+  meme.style.display = "block";
+  setTimeout(() => meme.style.opacity = "1", 50);
+
+  if (step === 1) {
+    text.innerText = "พร้อมยังนะ 😳";
+    meme.src = catMemes[0];
+    yesBtn.innerText = "พร้อมแล้ว!";
+  }
+
+  else if (step === 2) {
+    text.innerText = "อย่าเขินนะจ๊ะ 🫣";
+    meme.src = catMemes[1];
+    yesBtn.innerText = "ไม่สน 😂";
+  }
+
+  else if (step === 3) {
+    text.innerText = "ระวังตกหลุมรักเราน้าาา 😜";
+    meme.src = catMemes[2];
+    yesBtn.innerText = "ตกแล้ว ❤️";
+  }
+
+  else if (step === 4) {
+    text.innerText = "ดีใจนะที่ได้รู้จักแก 💖";
+    meme.src = catMemes[3];
+    yesBtn.innerText = "ต่อไป";
+  }
+
+  else if (step === 5) {
+    text.innerText = "โอเค... อันสุดท้ายละนะ 👀";
+
+    meme.style.opacity = "0";
+    setTimeout(() => meme.style.display = "none", 300);
+
+    yesBtn.innerText = "กดนี่สิ 🤭";
+    yesBtn.style.position = "fixed";
+    yesBtn.style.top = "0";
+    yesBtn.style.left = "0";
+    yesBtn.style.width = "100vw";
+    yesBtn.style.height = "100vh";
+    yesBtn.style.fontSize = "30px";
+
+    noBtn.style.display = "none";
+  }
+
+  else if (step === 6) {
+    document.body.innerHTML = `
+      <div style="padding:40px;text-align:center;background: linear-gradient(to bottom, #ffe4ec, #f5edff);min-height:100vh;">
+        
+        <h1 style="color:#ff4d88;">
+          Happy Birthday na baby 🎂💖
+        </h1>
+
+        <p style="line-height:2; max-width:500px; margin:auto;">
+        ขอบคุณที่เข้ามาในชีวิตเรานะ ขอให้ปีนี้เป็นปีที่ดีของแก
+        ขอให้วันแย่ๆของแกถูกเยียวยาด้วยของอร่อย
+        ขอให้แกรักตัวเองมากขึ้นในทุกวัน
+        ขอให้มีแต่เรื่องดีๆเข้ามา
+        ขอให้ยิ้มได้เยอะๆนะ 😊
+        </p>
+
+        <img src="https://cdn-icons-png.flaticon.com/512/4202/4202843.png"
+             style="width:120px;margin-top:30px;filter: drop-shadow(0 10px 15px rgba(0,0,0,0.15));animation: floatCake 3s ease-in-out infinite;">
+      </div>
+    `;
+  }
+};
+</script>
+
+</body>
+</html>
