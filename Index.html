@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Surprise 👀</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: sans-serif;
+      background: #ffe6f0;
+      padding: 50px;
+    }
+    img {
+      width: 250px;
+      margin: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 10px;
+    }
+    #yes { background: #ff6699; color: white; }
+    #no { background: #ccc; }
+  </style>
+</head>
+<body>
+
+<h1 id="text">แก... เรามีอะไรจะให้ 👀</h1>
+
+<img id="meme" src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif">
+
+<div id="buttons">
+  <button id="yes">อยากรู้ 🤔</button>
+  <button id="no">ไม่อะ 😏</button>
+</div>
+
+<script>
+document.getElementById("yes").onclick = function() {
+  document.getElementById("text").innerText = "รักนะ 💖";
+  document.getElementById("meme").src = "https://media.giphy.com/media/l0HlQ7LRalQqdWfao/giphy.gif";
+}
+
+document.getElementById("no").onclick = function() {
+  alert("ลองกดใหม่อีกที 😜");
+}
+</script>
+
+</body>
+</html>
