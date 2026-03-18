@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>มีอะไรจะให้ 👀</title>
+
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #ffd6e0, #fff5e1, #e6d6ff);
+  padding: 30px;
+  overflow-x: hidden;
+}
+
+h1 { color: #ff4d88; }
+
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 20px;
+  border: none;
+  font-size: 16px;
+}
+
+#yes { background: #ff6fa5; color: white; }
+#no { background: #ccc; }
+
+#meme {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 20px;
+  display: none;
+  margin: 20px auto;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="text">แก... เรามีอะไรจะให้ 👀</h1>
+
+<img id="meme">
+
+<div>
+  <button id="yes">อยากรู้ 🤔</button>
+  <button id="no">ไม่อยากรู้ 🙄</button>
+</div>
+
+<audio id="bgm">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let step = 0;
+
+let text = document.getElementById("text");
+let meme = document.getElementById("meme");
+let audio = document.getElementById("bgm");
+
+document.body.addEventListener("click", () => {
+  audio.play();
+}, { once: true });
+
+/* ❌ ปุ่มไม่อยากรู้ */
+let noScale = 1;
+document.getElementById("no").onclick = () => {
+  noScale *= 0.7;
+  document.getElementById("no").style.transform = `scale(${noScale})`;
+};
+
+/* 🐱 ใช้ชื่อไฟล์ตัวใหญ่ตามจริง */
+let cats = ["cat1.JPG","cat2.JPG","cat3.JPG","cat4.JPG"];
+
+document.getElementById("yes").onclick = () => {
+  step++;
+  meme.style.display = "block";
+
+  if(step === 1){
+    text.innerText = "พร้อมยังนะ 😳";
+    meme.src = cats[0];
+  }
+
+  else if(step === 2){
+    text.innerText = "อย่าเขินนะ 🫣";
+    meme.src = cats[1];
+  }
+
+  else if(step === 3){
+    text.innerText = "ระวังตกหลุมรักนะ 😜";
+    meme.src = cats[2];
+  }
+
+  else if(step === 4){
+    text.innerText = "ดีใจนะที่ได้รู้จักแก 💖";
+    meme.src = cats[3];
+  }
+
+  else if(step === 5){
+    text.innerText = "อันสุดท้ายแล้วนะ 👀";
+    meme.style.display = "none";
+  }
+
+  else if(step === 6){
+    document.body.innerHTML = `
+      <div style="padding:40px;">
+        <h1 style="color:#ff4d88;">Happy Birthday na baby 🎂💖</h1>
+
+        <p style="line-height:2; max-width:500px; margin:auto;">
+        ขอบคุณที่เข้ามาในชีวิตนะ ขอให้ปีนี้เป็นปีที่ดีของแก
+        ขอให้วันแย่ๆของแกถูกเยียวยาด้วยของอร่อย
+        ขอให้แกรดน้ำในหัวใจตัวเองเสมอ
+        ขอให้แกหายดีจากความเจ็บปวดที่ไม่เคยบอกใคร
+        ขอให้แกถูกรักอยู่เสมอ
+        ขอให้มีวันที่ใจดี
+        ขอให้มีวันที่น่ารัก
+        ขอให้มีวันที่ยิ้มได้มากขึ้น
+        ขอให้มีวันที่แกชอบตัวเองมากกว่าเมื่อวาน
+        ขอให้มีความสุขในทุกวัน
+        </p>
+
+        <!-- 🎂 ใช้ WEBP ตัวใหญ่ -->
+        <img src="cake.WEBP" style="width:180px;margin-top:30px;">
+      </div>
+    `;
+  }
+};
+</script>
+
+</body>
+</html>
