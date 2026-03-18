@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>มีอะไรจะให้ 👀</title>
+
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #ffd6e0, #fff5e1, #e6d6ff);
+  padding: 30px;
+  overflow-x: hidden;
+
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+#app {
+  max-width: 400px;
+  margin: auto;
+  animation: popUp 0.8s ease;
+}
+
+@keyframes popUp {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+h1 {
+  color: #ff4d88;
+  transition: 0.3s;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 20px;
+  border: none;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover { transform: scale(1.1); }
+
+#yes { background: #ff6fa5; color: white; }
+#no { background: #ccc; }
+
+#meme {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 20px;
+  display: none;
+  margin: 20px auto;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.heart {
+  position: fixed;
+  bottom: 0;
+  font-size: 18px;
+  animation: floatUp 4s linear infinite;
+}
+
+@keyframes floatUp {
+  to { transform: translateY(-100vh); opacity: 0; }
+}
+
+@keyframes floatCake {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+  <h1 id="text">แก... เรามีอะไรจะให้ 👀</h1>
+
+  <img id="meme" src="" loading="lazy"/>
+
+  <div id="buttons">
+    <button id="yes">อยากรู้ 🤔</button>
+    <button id="no">ไม่อยากรู้ 🙄</button>
+  </div>
+</div>
+
+<!-- 🎵 เพลง (ต้องอัปไฟล์ music.mp3 เอง) -->
+<audio id="bgm" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let text = document.getElementById("text");
+let yesBtn = document.getElementById("yes");
+let noBtn = document.getElementById("no");
+let meme = document.getElementById("meme");
+let audio = document.getElementById("bgm");
+
+let step = 0;
+
+/* 🎵 เริ่มเพลงตอนกด */
+document.body.addEventListener("click", () => {
+  audio.play();
+}, { once: true });
+
+/* 💖 hearts */
+function createHeart() {
+  let h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "💖";
+  h.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 4000);
+}
+setInterval(createHeart, 700);
+
+/* ❌ ปุ่มไม่อยากรู้ */
+let noScale = 1;
+noBtn.onclick = () => {
+  noScale *= 0.7;
+  noBtn.style.transform = `scale(${noScale})`;
+};
+
+/* 🐱 แมวสุ่ม */
+async function getCat() {
+  try {
+    let res = await fetch("https://api.thecatapi.com/v1/images/search");
+    let data = await res.json();
+    return data[0].url;
+  } catch {
+    return "https://placekitten.com/300/300";
+  }
+}
+
+/* ✨ text smooth */
+function changeText(newText){
+  text.style.opacity = 0;
+  setTimeout(()=>{
+    text.innerText = newText;
+    text.style.opacity = 1;
+  },200);
+}
+
+yesBtn.onclick = () => {
+  step++;
+
+  meme.style.display = "block";
+  setTimeout(() => meme.style.opacity = "1", 50);
+
+  if (step === 1) {
+    changeText("พร้อมยังนะ 😳");
+    getCat().then(url => meme.src = url);
+    yesBtn.innerText = "พร้อมแล้ว!";
+  }
+
+  else if (step === 2) {
+    changeText("อย่าเขินนะจ๊ะ 🫣");
+    getCat().then(url => meme.src = url);
+    yesBtn.innerText = "ไม่สน 😂";
+  }
+
+  else if (step === 3) {
+    changeText("ระวังตกหลุมรักเราน้าาา 😜");
+    getCat().then(url => meme.src = url);
+    yesBtn.innerText = "ตกแล้ว ❤️";
+  }
+
+  else if (step === 4) {
+    changeText("ดีใจนะที่ได้รู้จักแก 💖");
+    getCat().then(url => meme.src = url);
+    yesBtn.innerText = "ต่อไป";
+  }
+
+  else if (step === 5) {
+    changeText("โอเค... อันสุดท้ายละนะ 👀");
+
+    meme.style.opacity = "0";
+    setTimeout(() => meme.style.display = "none", 300);
+
+    yesBtn.innerText = "กดนี่สิ 🤭";
+    yesBtn.style.position = "fixed";
+    yesBtn.style.top = "0";
+    yesBtn.style.left = "0";
+    yesBtn.style.width = "100vw";
+    yesBtn.style.height = "100vh";
+    yesBtn.style.fontSize = "30px";
+
+    noBtn.style.display = "none";
+  }
+
+  else if (step === 6) {
+    document.body.innerHTML = `
+      <div style="padding:40px;text-align:center;background: linear-gradient(to bottom, #ffe4ec, #f5edff);min-height:100vh;">
+        
+        <h1 style="color:#ff4d88;">
+          Happy Birthday na baby 🎂💖
+        </h1>
+
+        <p style="line-height:2; max-width:500px; margin:auto;">
+        ขอบคุณที่เข้ามาในชีวิตเรานะ ขอให้ปีนี้เป็นปีที่ดีของแก
+        ขอให้วันแย่ๆของแกถูกเยียวยาด้วยของอร่อย
+        ขอให้แกรดน้ำในหัวใจตัวเองเสมอ
+        ขอให้แกหายดีจากความเจ็บปวดที่ไม่เคยบอกใคร
+        ขอให้แกถูกรักอยู่เสมอ
+        ขอให้มีวันที่ใจดี
+        ขอให้มีวันที่น่ารัก
+        ขอให้มีวันที่ยิ้มได้มากขึ้น
+        ขอให้มีวันที่แกชอบตัวเองมากกว่าเมื่อวาน
+        ขอให้มีความสุขในทุกวัน
+        ถ้าได้อ่านข้อความนี้ ขอให้ทุกคำขอของแกเป็นจริง
+        </p>
+
+        <!-- 🎂 เค้กน่ารัก -->
+        <img src="https://cdn-icons-png.flaticon.com/512/3468/3468379.png"
+             style="width:140px;margin-top:30px;animation: floatCake 3s ease-in-out infinite;">
+      </div>
+    `;
+
+    /* 💥 หัวใจตอนจบ */
+    setInterval(()=>{
+      let h = document.createElement("div");
+      h.innerText = "💖";
+      h.style.position = "fixed";
+      h.style.left = Math.random()*100+"vw";
+      h.style.top = Math.random()*100+"vh";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),2000);
+    },200);
+  }
+};
+</script>
+
+</body>
+</html>
