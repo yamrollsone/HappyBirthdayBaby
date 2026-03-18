@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>มีอะไรจะให้ 👀</title>
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #ffd6e0, #ffe9f5, #e6d6ff);
+  padding: 30px;
+  overflow-x: hidden;
+  margin:0;
+}
+
+/* ตัวหนังสือใหญ่ทุกหน้า */
+h1 { 
+  color: #ff4d88; 
+  font-size:3.5rem; 
+  transition:0.3s; 
+}
+h1.animateStep {
+  animation: floatShake 0.8s ease-in-out;
+}
+@keyframes floatShake {
+  0%,100% { transform: translateY(0); }
+  25% { transform: translateY(-5px) rotate(-2deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+  75% { transform: translateY(-5px) rotate(-1deg); }
+}
+p {
+  font-size:1.7rem; 
+  line-height:2;
+  max-width:600px;
+  margin:10px auto;
+  transition:0.5s;
+}
+
+/* Buttons ใหญ่ขึ้น */
+button {
+  padding: 20px 32px;
+  margin: 10px;
+  border-radius: 25px;
+  border: none;
+  font-size: 22px;
+  transition:0.3s;
+  cursor:pointer;
+}
+button:hover { 
+  transform: scale(1.1); 
+  box-shadow: 0 0 20px rgba(255,111,165,0.7);
+}
+#yes { background: #ff6fa5; color: white; }
+#no { background: #ccc; position: relative; }
+
+/* รูปแมวใหญ่เท่ากัน */
+#meme {
+  width: 80vw;       
+  height: auto;
+  object-fit: contain; 
+  border-radius: 20px;
+  display: none;
+  margin: 20px auto;
+  opacity: 0;
+  transition:0.5s;
+}
+
+/* หัวใจลอย */
+.heart {
+  position: fixed;
+  bottom: 0;
+  font-size: 18px;
+  animation: floatUp 4s linear infinite;
+}
+@keyframes floatUp {
+  to { transform: translateY(-100vh); opacity:0; }
+}
+@keyframes floatCake {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.centered {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  text-align:center;
+  padding:20px;
+}
+
+/* หน้าเค้กสุดท้าย */
+.final h1 { margin-top:20px; transition:0.5s; }
+.final p {
+  text-align: center;  
+  font-size:1.65rem;  /* ลดเล็กน้อยเพื่อให้บรรทัดลื่นไหล */
+  line-height:2.2;   
+  max-width: 700px;  /* กว้างขึ้นเพื่อไม่ตัดคำกลางประโยค */
+  margin: 20px auto;
+  word-break: normal;
+  white-space: normal;
+}
+.final img {
+  width: 350px;        /* ขนาดเค้กใหญ่ขึ้น */
+  display: block;
+  margin: 20px auto;
+  animation: floatCake 3s ease-in-out infinite;
+}
+</style>
+</head>
+<body>
+
+<audio id="bgm" loop preload="auto" style="display:none;">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div id="app" class="centered">
+  <h1 id="text">แก... เรามีอะไรจะให้ 👀</h1>
+  <img id="meme">
+  <div id="buttons">
+    <button id="yes">อยากรู้ 🤔</button>
+    <button id="no">ไม่อยากรู้ 🙄</button>
+  </div>
+</div>
+
+<script>
+let step = 0;
+let text = document.getElementById("text");
+let meme = document.getElementById("meme");
+let yesBtn = document.getElementById("yes");
+let noBtn = document.getElementById("no");
+let audio = document.getElementById("bgm");
+let app = document.getElementById("app");
+
+// เล่นเพลงครั้งแรกเมื่อคลิก body
+document.body.addEventListener("click", ()=>{ audio.play(); }, {once:true});
+
+// 💖 hearts แบบสุ่มสี
+function createHeart(){
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerText="💖";
+  let colors = ["#ff4d88","#ff6fa5","#ff99c8","#ffa6c9","#ffd6e0"];
+  h.style.color = colors[Math.floor(Math.random()*colors.length)];
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),4000);
+}
+setInterval(createHeart,700);
+
+// 🐱 รูปแมว
+let cats=["cat1.JPG","cat2.JPG","cat3.JPG","cat4.JPG"];
+let steps=[
+  {text:"พร้อมยังจ๊ะเบบี๋ 😳", meme:cats[0]},
+  {text:"อย่าเขินนะจ๊ะ 🫣", meme:cats[1]},
+  {text:"ระวังตกหลุมรักเราน้าา 😜", meme:cats[2]},
+  {text:"อันนี้ แอบยิ้มแล้วยังง 😘", meme:cats[3]},
+  {text:"โอเค...สุดท้ายละจีงง 👀", meme:null}
+];
+
+// Mapping Yes ให้ตรง Step
+let stepYesMapping = [
+  "พร้อมแล้ว! 😆",
+  "ว้ายยยย 😳",
+  "ตกขยะ 🥹",
+  "😁",           
+  "💗💗💗💗💗"      
+];
+
+// 💌 คลิก yes
+yesBtn.onclick = ()=>{
+  step++;
+  if(step<=steps.length){
+    let s = steps[step-1];
+
+    text.classList.remove("animateStep");
+    void text.offsetWidth;
+    text.classList.add("animateStep");
+
+    text.style.opacity=0;
+    setTimeout(()=>{
+      text.innerText=s.text;
+      text.style.opacity=1;
+    },200);
+
+    if(s.meme){
+      meme.style.display="block";
+      meme.src=s.meme;
+      meme.style.width="80vw"; 
+      meme.style.height="auto";
+      setTimeout(()=>meme.style.opacity=1,50);
+    }else{
+      meme.style.opacity=0;
+      setTimeout(()=>meme.style.display="none",300);
+    }
+
+    yesBtn.innerText = stepYesMapping[step-1];
+    let currentFont = parseInt(window.getComputedStyle(yesBtn).fontSize);
+    yesBtn.style.fontSize = (currentFont + 2) + "px";
+    yesBtn.style.padding = (20 + 2) + "px " + (32 + 4) + "px";
+
+    if(step > 1){
+      noBtn.style.display = "none";
+    }
+
+  }else{
+    yesBtn.style.display = "none";
+    noBtn.style.display = "none";
+    app.classList.add("final");
+
+    // หัวข้อหน้าเค้ก
+    text.innerText = "happy birthday na my baby 🎂🥳🎂";
+    text.style.color="#ff4d88";
+    text.style.opacity=0;
+    setTimeout(()=>text.style.opacity=1,300);
+
+    // คำอวยพร
+    let wishesParagraph = "ขอบคุณที่เข้ามาในชีวิตเรานะ ขอให้ปีนี้เป็นปีที่ดีของแก ขอให้วันแย่ๆของแกถูกเยียวยาด้วยของอร่อย ขอให้แกรดน้ำในหัวใจตัวเองให้เบ่งบาน ขอให้แกหายดีจากความเจ็บปวดที่ไม่เคยบอกใคร ขอให้แกถูกรักอยู่เสมอ มีวันที่ใจดี มีวันที่น่ารัก มีวันที่ยิ้มได้มากขึ้น มีวันที่แกชอบตัวเองมากกว่าเมื่อวาน และสุดท้ายขอให้มีความสุขในทุกวัน ถ้าได้อ่านข้อความนี้ ขอให้ทุกคำขอของแกเป็นจริง";
+
+    let p = document.createElement("p");
+    p.innerText = wishesParagraph;
+    p.style.opacity = 0;
+    p.style.textAlign = "center";
+    app.appendChild(p);
+    setTimeout(()=>p.style.opacity=1, 500);
+
+    // เค้กใหญ่
+    let cake = document.createElement("img");
+    cake.src="catcake.jpg";
+    cake.style.width="350px";   
+    cake.style.opacity=0;
+    cake.style.animation="floatCake 3s ease-in-out infinite";
+    app.appendChild(cake);
+    setTimeout(()=>cake.style.opacity=1, 800);
+  }
+};
+
+// 💥 ปุ่ม No เด้งไกลๆ
+noBtn.onclick = ()=>{
+  let x = Math.random()*80 + 10;
+  let y = Math.random()*80 + 10;
+  noBtn.style.position="absolute";
+  noBtn.style.top=x+"vh";
+  noBtn.style.left=y+"vw";
+  noBtn.style.transform="scale(0.8)";
+};
+</script>
+</body>
+</html>
