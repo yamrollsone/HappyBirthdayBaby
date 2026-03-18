@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>มีอะไรจะให้ 👀</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom, #ffd6e0, #fff5e1, #e6d6ff);
+  padding: 30px;
+}
+
+#app {
+  max-width: 400px;
+  margin: auto;
+}
+
+h1 {
+  color: #ff4d88;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 20px;
+  border: none;
+  font-size: 16px;
+}
+
+#yes {
+  background: #ff6fa5;
+  color: white;
+}
+
+#no {
+  background: #ccc;
+}
+
+#meme {
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  display: none;
+  margin: 20px auto;
+}
+
+/* hearts */
+.heart {
+  position: fixed;
+  bottom: 0;
+  font-size: 18px;
+  animation: floatUp 4s linear infinite;
+}
+
+@keyframes floatUp {
+  to {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+  <h1 id="text">แก... เรามีอะไรจะให้ 👀</h1>
+
+  <img id="meme" />
+
+  <div>
+    <button id="yes">อยากรู้ 🤔</button>
+    <button id="no">ไม่อยากรู้ 🙄</button>
+  </div>
+</div>
+
+<script>
+let text = document.getElementById("text");
+let yesBtn = document.getElementById("yes");
+let noBtn = document.getElementById("no");
+let meme = document.getElementById("meme");
+
+let step = 0;
+
+/* 💖 hearts */
+setInterval(() => {
+  let h = document.createElement("div");
+  h.className = "heart";
+  h.innerText = "💖";
+  h.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 4000);
+}, 700);
+
+/* ❌ ปุ่มไม่อยากรู้ */
+noBtn.onclick = () => {
+  noBtn.style.transform = "scale(0.7)";
+};
+
+/* 🐱 รูปใหม่ (เสถียรจริง) */
+let catMemes = [
+  "https://i.imgur.com/j5q9V8K.jpeg",
+  "https://i.imgur.com/3ZQ3Z7R.jpeg",
+  "https://i.imgur.com/V6XbW7E.jpeg",
+  "https://i.imgur.com/8Km9tLL.jpeg"
+];
+
+yesBtn.onclick = () => {
+  step++;
+
+  meme.style.display = "block";
+
+  if (step === 1) {
+    text.innerText = "พร้อมยังนะ 😳";
+    meme.src = catMemes[0];
+  }
+
+  else if (step === 2) {
+    text.innerText = "อย่าเขินนะ 🫣";
+    meme.src = catMemes[1];
+  }
+
+  else if (step === 3) {
+    text.innerText = "ระวังตกหลุมรักนะ 😜";
+    meme.src = catMemes[2];
+  }
+
+  else if (step === 4) {
+    text.innerText = "ดีใจนะที่ได้รู้จักแก 💖";
+    meme.src = catMemes[3];
+  }
+
+  else if (step === 5) {
+    text.innerText = "โอเค อันสุดท้ายละ 👀";
+    yesBtn.innerText = "กดนี่สิ 🤭";
+  }
+
+  else if (step === 6) {
+    document.body.innerHTML = `
+      <h1>Happy Birthday 🎂💖</h1>
+      <p>
+      ขอให้ปีนี้เป็นปีที่ดีของแกนะ  
+      ขอให้มีความสุขมากๆ  
+      และขอบคุณที่อยู่ในชีวิตเรา 😊
+      </p>
+      <img src="https://i.imgur.com/OdL0XPt.png" width="120">
+    `;
+  }
+};
+</script>
+
+</body>
+</html>
